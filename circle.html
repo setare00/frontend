@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="300" style="border:1px solid #d3d3d3;"></canvas>
+</body>
+<script>
+    const canvas= document.getElementById("canvas");
+    const ctx = canvas.getContext('2d');
+   var circles = [{
+    x: 150,
+    y: 150,
+    r: 150,
+    split: false
+    },
+    {
+    x: 450,
+    y: 150,
+    r: 150,
+    split:false
+    }];    
+    
+    makeCircle(circles[0]);
+    makeCircle(circles[1]);
+    canvas.addEventListener("mousemove", split, false);
+    split();
+
+//
+    function makeCircle(circle){
+        ctx.fillStyle = getRandomColor();
+        ctx.beginPath();
+        ctx.ellipse(circle.x, circle.y, circle.r, circle.r, 0, 0, 2 * Math.PI);
+        // ctx.stroke(255, 255, 255);
+        ctx.fill();
+    }
+    // Random Color
+    function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+    }
+
+
+    function split(event){
+        // console.log('split', event.pageX);
+        for(var i=0; i < circles.length; i++){
+        var circle = circles[i];
+        // console.log('circle.r- event.pageX', circle.r , event.pageX, event.pageY);
+        
+        if(!circle.split && Math.abs(event.pageX - circle.x) < circle.r && Math.abs(event.pageY - circle.y) < circle.r && circle.r > 5 ){
+            circle.split = true;
+            var c1 = {
+                x: circle.x - circle.r/2,
+                y: circle.y - circle.r/2,
+                r: circle.r/2,
+                split:false
+            };
+            var c2 = {
+                x: circle.x + circle.r/2,
+                y: circle.y - circle.r/2,
+                r: circle.r/2,
+                split:false
+
+            };
+            var c3 = {
+                x: circle.x - circle.r/2,
+                y: circle.y + circle.r/2,
+                r: circle.r/2,
+                split:false
+
+            };
+            var c4 = {
+                x: circle.x + circle.r/2,
+                y: circle.y + circle.r/2,
+                r: circle.r/2,
+                split:false
+
+            };
+            circles.push(c1);
+            circles.push(c2);
+            circles.push(c3);
+            circles.push(c4);
+            // console.log('circles', circles);
+
+            makeCircle(c1);
+            makeCircle(c2);
+            makeCircle(c3);
+            makeCircle(c4);
+        }
+    }
+    }
+
+
+</script>
+</html>
